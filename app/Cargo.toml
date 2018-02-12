@@ -1,0 +1,8 @@
+[package]
+name = "app"
+version = "0.1.0"
+authors = ["Josh Matthews <josh@joshmatthews.net>"]
+
+[dependencies]
+base = { path = "../base" }
+middle = { path = "../middle" }
