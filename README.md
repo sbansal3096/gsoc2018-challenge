@@ -11,3 +11,6 @@ code as possible, and make `middle` depend on `base-api` instead of `base`. You 
 want to use Rust features like traits with associated types and generic types in order
 to accomplish this. Our goal is to avoid rebuilding the `middle` crate whenever we make
 a change to a file in `base/`.
+
+To build the project, run `cargo build` from the root directory. Run `cargo test` and
+`cargo run` from the `app/` directory.
