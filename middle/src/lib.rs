@@ -1,6 +1,6 @@
-extern crate base;
+extern crate baseapi;
 
-use base::{Logger, LogEntry};
+use baseapi::{Logger, LogEntry};
 use std::mem;
 
 pub struct Middleware {

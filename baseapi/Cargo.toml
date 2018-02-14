@@ -1,7 +1,7 @@
 [package]
-name = "middle"
+name = "baseapi"
 version = "0.1.0"
 authors = ["Josh Matthews <josh@joshmatthews.net>"]
 
+
 [dependencies]
-baseapi = { path = "../baseapi" }
