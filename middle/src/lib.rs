@@ -1,15 +1,16 @@
 extern crate baseapi;
 
-use baseapi::{Logger, LogEntry};
+use std::convert::AsRef;
+use baseapi::{LogEntryTrait, LoggerTrait};
 use std::mem;
 
-pub struct Middleware {
-    logger: Logger,
-    violations: Vec<LogEntry>,
+pub struct Middleware<T: LoggerTrait<U>,U: LogEntryTrait+AsRef<str> > {
+    logger: T,
+    violations: Vec<U>,
 }
 
-impl Middleware {
-    fn new(logger: Logger) -> Middleware {
+impl<T:LoggerTrait<U>,U:LogEntryTrait+AsRef<str> > Middleware<T,U> {
+    fn new(logger: T) -> Middleware<T,U> {
         Middleware {
             logger,
             violations: vec![]
@@ -20,17 +21,17 @@ impl Middleware {
         self.violations.push(self.logger.log(s));
     }
 
-    pub fn take_violations(&mut self) -> Vec<LogEntry> {
+    pub fn take_violations(&mut self) -> Vec<U> {
         mem::replace(&mut self.violations, vec![])
     }
 
-    pub fn take_logger(self) -> Logger {
+    pub fn take_logger(self) -> T {
         self.logger
     }
 }
 
-pub fn create_middleware() -> Middleware {
-    Middleware::new(Logger::new())
+pub fn create_middleware<T:LoggerTrait<U>,U:LogEntryTrait+AsRef<str> >() -> Middleware<T,U> {
+    Middleware::new(T::new())
 }
 
 #[cfg(test)]
