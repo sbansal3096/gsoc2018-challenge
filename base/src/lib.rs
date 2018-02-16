@@ -7,7 +7,7 @@ pub struct Logger;
 pub struct LogEntry(String);
 
 impl LoggerTrait<LogEntry> for Logger{
-    //type LogEnt=LogEntry;
+    
     fn new() -> Logger {
         Logger
     }
