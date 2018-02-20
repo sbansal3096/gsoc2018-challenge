@@ -21,7 +21,7 @@ pub struct Middleware<T:LoggerTrait<U>, U: LogEntryTrait+AsRef<str> > {
     }
 
 impl<T:LoggerTrait<U> ,U:LogEntryTrait+AsRef<str> > MiddlewareTrait<T,U> for Middleware<T,U> {
-    type assocuatedType1 = Logger;
+    type associatedType1 = Logger;
     fn new(logger: T) -> Middleware<T,U> {
         Middleware {
             logger,
