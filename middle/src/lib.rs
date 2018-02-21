@@ -1,28 +1,26 @@
 extern crate baseapi;
 
-use std::convert::AsRef;
-use baseapi::{LogEntryTrait, LoggerTrait};
+use baseapi::{LoggerTrait};
 use std::mem;
 
-struct Logger;
 
-pub trait MiddlewareTrait<T:LoggerTrait<U> ,U:LogEntryTrait+AsRef<str> >{
-    type associatedType1 :LoggerTrait<U>;
+pub trait MiddlewareTrait<T:LoggerTrait >{
+
     fn new(logger: T)->Self;
     fn log_violation(&mut self, s: &str); 
-    fn take_violations(&mut self) -> Vec<U>; 
+    fn take_violations(&mut self) -> Vec<T::X>; 
     fn take_logger(self) -> T;
 }
 
 
-pub struct Middleware<T:LoggerTrait<U>, U: LogEntryTrait+AsRef<str> > {
+pub struct Middleware<T:LoggerTrait > {
     logger: T,
-    violations: Vec<U>,
+    violations: Vec<T::X>,
     }
 
-impl<T:LoggerTrait<U> ,U:LogEntryTrait+AsRef<str> > MiddlewareTrait<T,U> for Middleware<T,U> {
-    type associatedType1 = Logger;
-    fn new(logger: T) -> Middleware<T,U> {
+impl<T:LoggerTrait > MiddlewareTrait<T> for Middleware<T> {
+
+    fn new(logger: T) -> Middleware<T> {
         Middleware {
             logger,
             violations: vec![]
@@ -33,7 +31,7 @@ impl<T:LoggerTrait<U> ,U:LogEntryTrait+AsRef<str> > MiddlewareTrait<T,U> for Mid
             self.violations.push(self.logger.log(s));
     }
 
-    fn take_violations(&mut self) -> Vec<U> {
+    fn take_violations(&mut self) -> Vec<T::X> {
         mem::replace(&mut self.violations, vec![])
     }
 
@@ -42,7 +40,7 @@ impl<T:LoggerTrait<U> ,U:LogEntryTrait+AsRef<str> > MiddlewareTrait<T,U> for Mid
     }
 }
 
-pub fn create_middleware<T:LoggerTrait<U>, U:LogEntryTrait+AsRef<str> >() -> Middleware<T,U> {
+pub fn create_middleware<T:LoggerTrait>() -> Middleware<T> {
     Middleware::new(T::new())
 }
 

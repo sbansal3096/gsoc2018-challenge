@@ -6,14 +6,14 @@ use std::convert::AsRef;
 pub struct Logger;
 pub struct LogEntry(String);
 
-impl LoggerTrait<LogEntry> for Logger{
-    
+impl LoggerTrait for Logger{
+    type X = LogEntry;
     fn new() -> Logger {
         Logger
     }
 
-    fn log(&self, s: &str) -> LogEntry {
-        LogEntry::new(s)
+    fn log(&self, s: &str) -> Self::X {
+        Self::X::new(s)
     }
 }
 
@@ -22,6 +22,7 @@ impl LogEntryTrait for LogEntry {
         LogEntry(s.to_string())
     }
 }
+
 impl AsRef<str> for LogEntry {
     fn as_ref(&self) -> &str {
         &self.0

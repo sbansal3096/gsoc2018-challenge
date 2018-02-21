@@ -4,7 +4,9 @@ pub trait LogEntryTrait{
     fn new(s: &str)-> Self;
 }
 
-pub trait LoggerTrait<U:LogEntryTrait+AsRef<str> >{
+pub trait LoggerTrait{
+	type X:LogEntryTrait+AsRef<str>;
+    
     fn new()->Self;
-    fn log(&self, s: &str) -> U;
+    fn log(&self, s: &str) -> Self::X;
 }
