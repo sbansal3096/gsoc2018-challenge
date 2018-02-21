@@ -1,36 +1,47 @@
-extern crate base;
+extern crate baseapi;
 
-use base::{Logger, LogEntry};
+use baseapi::{LoggerTrait};
 use std::mem;
 
-pub struct Middleware {
-    logger: Logger,
-    violations: Vec<LogEntry>,
+
+pub trait MiddlewareTrait<T:LoggerTrait >{
+
+    fn new(logger: T)->Self;
+    fn log_violation(&mut self, s: &str); 
+    fn take_violations(&mut self) -> Vec<T::X>; 
+    fn take_logger(self) -> T;
 }
 
-impl Middleware {
-    fn new(logger: Logger) -> Middleware {
+
+pub struct Middleware<T:LoggerTrait > {
+    logger: T,
+    violations: Vec<T::X>,
+    }
+
+impl<T:LoggerTrait > MiddlewareTrait<T> for Middleware<T> {
+
+    fn new(logger: T) -> Middleware<T> {
         Middleware {
             logger,
             violations: vec![]
         }
     }
 
-    pub fn log_violation(&mut self, s: &str) {
-        self.violations.push(self.logger.log(s));
+    fn log_violation(&mut self, s: &str) {
+            self.violations.push(self.logger.log(s));
     }
 
-    pub fn take_violations(&mut self) -> Vec<LogEntry> {
+    fn take_violations(&mut self) -> Vec<T::X> {
         mem::replace(&mut self.violations, vec![])
     }
 
-    pub fn take_logger(self) -> Logger {
+    fn take_logger(self) -> T {
         self.logger
     }
 }
 
-pub fn create_middleware() -> Middleware {
-    Middleware::new(Logger::new())
+pub fn create_middleware<T:LoggerTrait>() -> Middleware<T> {
+    Middleware::new(T::new())
 }
 
 #[cfg(test)]

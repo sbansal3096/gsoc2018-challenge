@@ -9,11 +9,18 @@ dependencies = [
 [[package]]
 name = "base"
 version = "0.1.0"
+dependencies = [
+ "baseapi 0.1.0",
+]
+
+[[package]]
+name = "baseapi"
+version = "0.1.0"
 
 [[package]]
 name = "middle"
 version = "0.1.0"
 dependencies = [
- "base 0.1.0",
+ "baseapi 0.1.0",
 ]
 
